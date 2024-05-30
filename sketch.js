@@ -22,6 +22,8 @@ function windowResized() {
 //draw all the buildings
 function drawBuilding() {
   //fill the colour of the building shapes with gradient
+  fill(0);
+  stroke(0);
   linearGradient(
     182, 450, //Start point
     182, 19, //End point
@@ -181,7 +183,7 @@ function drawWave() {
       let c = lerpColor(c1, c2, inter);
       stroke(c);
       beginShape();//begin the shape for each wave line
-      for (let x = 0; x <= width; x += 10) { //calculate the wave offset
+      for (let x = 0; x <= width+9; x += 10) { //calculate the wave offset
         let wave = sin(x * randomFrequency + i * 0.1) * randomAmplitude * (waveHeight - j) / waveHeight;
         vertex(x, y + wave); //Specified vertex
       }
