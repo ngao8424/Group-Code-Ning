@@ -200,26 +200,28 @@ function drawWave() {
     // print(spectrum);
     // print(spectrum[floor(1024/waveCount)]);
     let y = startY + i * waveHeight;
-    let randomAmplitude = random(5, 20);//Randomize the amplitude for varying wave heights
-    let randomFrequency = random(0.01, 0.05); //Randomize the frequency for varing wave forms
+    let randomAmplitude = ((i+50) * 911 % 5 +9);//Randomize the amplitude for varying wave heights
+    let randomFrequency = ((i+50) * 911 % 71 + 30 )/2000; //Randomize the frequency for varing wave forms
 
     // Set the gradient color, from light blue to dark blue
     let c1 = lerpColor(color(173, 216, 230), color(0, 0, 139), i / waveCount);
     let c2 = lerpColor(color(173, 216, 230), color(0, 0, 139), (i + 1) / waveCount);
     //reference | p5.js. (n.d.). P5js.org. https://p5js.org/reference/#/p5/lerpColor
 
-    noFill();
+    // noFill();
     //draw each line within a wave
-    for (let j = 0; j < waveHeight; j++) {
+    for (let j = 0; j < 1; j++) {
       let inter = map(j, 0, waveHeight, 0, 1);//map the position within the wave to interpolate between colors
       //reference | p5.js. (n.d.-b). P5js.org. https://p5js.org/reference/#/p5/map
       let c = lerpColor(c1, c2, inter);
       stroke(c);
       beginShape();//begin the shape for each wave line
-      for (let x = 0; x <= width+9; x += 10) { //calculate the wave offset
-        let wave = sin(x * randomFrequency + i * 0.1) * randomAmplitude * (waveHeight - j) / waveHeight;
+      vertex(0, y);
+      for (let x = 0; x <= width+9; x ++) { //calculate the wave offset
+        let wave = sin(x * randomFrequency) * randomAmplitude ;//* (waveHeight - j) / waveHeight;
         vertex(x, y + wave); //Specified vertex
       }
+      vertex(width, y);
       endShape();
     }
   }
