@@ -1,7 +1,8 @@
 // new
 let song;
-
-
+let fft;
+let numBins = 1024;
+let smoothing = 0.8;
 let button;
 
 function preload() {
@@ -14,19 +15,19 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   randomSeed(99);
-  noLoop();
+  // noLoop();
   background(222, 184, 93);
 
 
   // new
-
+  fft = new p5.FFT(smoothing, numBins);
   button = createButton("Play/Pause");
   button.position((width - button.width) / 2, height - button.height - 2);
   button.mousePressed(play_pause);
 
   rectMode(CENTER);
   // colorMode(HSB, 255);
-
+  fft.setInput(song); 
 }
 
 function draw() {
@@ -135,6 +136,8 @@ function linearGradient(sX, sY, eX, eY, colorS, colorE) { //Input (start point x
 
 //This function is used to draw the gradual background sky
 function drawSky() {
+  // new
+  noFill();
   // Loop through the upper half of the canvas height
   for (let y = 0; y < height / 2; y++) {
     // Loop through the upper half of the canvas height
@@ -157,6 +160,8 @@ function drawSky() {
 
 //This function is used to draw the grandual background sky's reflection
 function drawSkyReflection() {
+  // new 
+  noFill();
   // Loop through the lower half of the canvas height
   for (let y = height / 2; y < height; y++) {
     // Calculate the interpolation factor from 0 to 1 for the current line
@@ -186,8 +191,14 @@ function drawWave() {
   let endY = height; //Ending Y-coordinate
   let waveHeight = 20; //Set the height of each wave
 
+  // new
+  let spectrum = fft.analyze();
+  // print(spectrum);
+  
   //loop through each wave
   for (let i = 0; i < waveCount; i++) {//calculate the Y position for the current wave
+    // print(spectrum);
+    // print(spectrum[floor(1024/waveCount)]);
     let y = startY + i * waveHeight;
     let randomAmplitude = random(5, 20);//Randomize the amplitude for varying wave heights
     let randomFrequency = random(0.01, 0.05); //Randomize the frequency for varing wave forms
