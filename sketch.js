@@ -1,3 +1,13 @@
+// new
+let song;
+
+
+let button;
+
+function preload() {
+  //audio file from freesound https://freesound.org/people/multitonbits/sounds/383935/?
+  song = loadSound("assets/383935__multitonbits__bs_electricity-bass-2.wav");
+}
 
 
 function setup() {
@@ -5,6 +15,17 @@ function setup() {
   randomSeed(99);
   noLoop();
   background(222, 184, 93);
+
+
+  // new
+
+  button = createButton("Play/Pause");
+  button.position((width - button.width) / 2, height - button.height - 2);
+  button.mousePressed(play_pause);
+
+  rectMode(CENTER);
+  // colorMode(HSB, 255);
+
 }
 
 function draw() {
@@ -189,5 +210,17 @@ function drawWave() {
       }
       endShape();
     }
+  }
+}
+
+
+// new
+function play_pause() {
+  if (song.isPlaying()) {
+    song.stop();
+  } else {
+    //we can use song.play() here if we want the song to play once
+    //In this case, we want the song to loop, so we call song.loop()
+    song.loop();
   }
 }
