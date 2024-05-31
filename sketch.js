@@ -8,7 +8,8 @@ let button;
 function preload() {
   //audio file from freesound https://freesound.org/people/multitonbits/sounds/383935/?
   // song = loadSound("assets/383935__multitonbits__bs_electricity-bass-2.wav");
-  song = loadSound("assets/videoplayback.mp4");
+  // song = loadSound("assets/bach.mp4");
+  song = loadSound("assets/bach.mp4");
 }
 
 
@@ -22,7 +23,8 @@ function setup() {
   // new
   fft = new p5.FFT(smoothing, numBins);
   button = createButton("Play/Pause");
-  button.position((width - button.width) / 2, height - button.height - 2);
+  button.position( 10, 10);
+  button.size(100, 100);
   button.mousePressed(play_pause);
 
   rectMode(CENTER);
@@ -200,25 +202,26 @@ function drawWave() {
     // print(spectrum);
     // print(spectrum[floor(1024/waveCount)]);
     let y = startY + i * waveHeight;
-    let randomAmplitude = ((i+50) * 911 % 5 +9);//Randomize the amplitude for varying wave heights
-    let randomFrequency = ((i+50) * 911 % 71 + 30 )/2000; //Randomize the frequency for varing wave forms
-
+    let randomAmplitude = song.isPlaying() ? max(5, spectrum[floor(map(i, 0, waveCount, 0, 150))]/3) : ((i+50) * 911 % 5 +10);//Randomize the amplitude for varying wave heights
+    let randomFrequency = ((i+50) * 911 % 511 + 100 )/10000; //Randomize the frequency for varing wave forms
+    let randomOffset = ((i+500) * 911 % 3);
     // Set the gradient color, from light blue to dark blue
     let c1 = lerpColor(color(173, 216, 230), color(0, 0, 139), i / waveCount);
     let c2 = lerpColor(color(173, 216, 230), color(0, 0, 139), (i + 1) / waveCount);
     //reference | p5.js. (n.d.). P5js.org. https://p5js.org/reference/#/p5/lerpColor
 
     // noFill();
+    stroke(255);
     //draw each line within a wave
     for (let j = 0; j < 1; j++) {
       let inter = map(j, 0, waveHeight, 0, 1);//map the position within the wave to interpolate between colors
       //reference | p5.js. (n.d.-b). P5js.org. https://p5js.org/reference/#/p5/map
       let c = lerpColor(c1, c2, inter);
-      stroke(c);
+      fill(c);
       beginShape();//begin the shape for each wave line
       vertex(0, y);
       for (let x = 0; x <= width+9; x ++) { //calculate the wave offset
-        let wave = sin(x * randomFrequency) * randomAmplitude ;//* (waveHeight - j) / waveHeight;
+        let wave = sin(x * randomFrequency + randomOffset) * randomAmplitude ;//* (waveHeight - j) / waveHeight;
         vertex(x, y + wave); //Specified vertex
       }
       vertex(width, y);
